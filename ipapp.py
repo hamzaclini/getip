@@ -1,15 +1,15 @@
 import streamlit as st
 import requests
 
-def get_ip():
+def get_public_ip():
     try:
         response = requests.get('https://api.ipify.org?format=json')
+        response.raise_for_status()  # Check for HTTP request errors
         ip = response.json()['ip']
         return ip
-    except Exception as e:
-        st.error(f"Error getting IP address: {e}")
-        return None
+    except requests.exceptions.RequestException as e:
+        return f"Error getting IP address: {e}"
     
-ip_address = get_ip()
+ip_address = get_public_ip()
 
 st.write(ip_address)
