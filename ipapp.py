@@ -1,15 +1,20 @@
 import streamlit as st
 import requests
 
-def get_public_ip():
+import socket
+def get_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.settimeout(0)
     try:
-        response = requests.get('https://api.ipify.org?format=json')
-        response.raise_for_status()  # Check for HTTP request errors
-        ip = response.json()['ip']
-        return ip
-    except requests.exceptions.RequestException as e:
-        return f"Error getting IP address: {e}"
+        # doesn't even have to be reachable
+        s.connect(('10.254.254.254', 1))
+        IP = s.getsockname()[0]
+    except Exception:
+        IP = '127.0.0.1'
+    finally:
+        s.close()
+    return IP
     
-ip_address = get_public_ip()
+ip_address = get_ip()
 
 st.write(ip_address)
