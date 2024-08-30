@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+import socket
 
 import socket
 def get_ip():
